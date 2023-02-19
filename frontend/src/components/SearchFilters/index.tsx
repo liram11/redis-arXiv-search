@@ -44,8 +44,6 @@ export const SearchFilters = ({
   matchExactCategories,
   onMatchExactCategoriesChange
 }: Props) => {
-  console.log(years)
-  console.log(categories)
 
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
