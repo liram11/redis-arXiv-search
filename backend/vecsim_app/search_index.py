@@ -13,7 +13,6 @@ class TokenEscaper:
     """
     Escape punctuation within an input string. Taken from RedisOM Python.
     """
-
     # Characters that RediSearch requires us to escape during queries.
     # Source: https://redis.io/docs/stack/search/reference/escaping/#the-rules-of-text-field-tokenization
     DEFAULT_ESCAPED_CHARS = r"[,.<>{}\[\]\\\"\':;!@#$%^&*()\-+=~\/ ]"
@@ -40,7 +39,6 @@ class SearchIndex:
     and actions applied to a RediSearch index including creation,
     manegement, and query construction.
     """
-
     escaper = TokenEscaper()
 
     async def create_flat(
@@ -62,15 +60,13 @@ class SearchIndex:
         """
         vector_field = VectorField(
             "vector",
-            "FLAT",
-            {
+            "FLAT", {
                 "TYPE": "FLOAT32",
                 "DIM": 768,
                 "DISTANCE_METRIC": distance_metric,
                 "INITIAL_CAP": number_of_vectors,
-                "BLOCK_SIZE": number_of_vectors,
-            },
-        )
+                "BLOCK_SIZE": number_of_vectors
+            })
         await self._create(
             *fields,
             vector_field,
@@ -97,14 +93,12 @@ class SearchIndex:
         """
         vector_field = VectorField(
             "vector",
-            "HNSW",
-            {
+            "HNSW", {
                 "TYPE": "FLOAT32",
                 "DIM": 768,
                 "DISTANCE_METRIC": distance_metric,
                 "INITIAL_CAP": number_of_vectors,
-            },
-        )
+            })
         await self._create(*fields, vector_field, redis_conn=redis_conn, prefix=prefix)
 
     async def _create(
@@ -116,7 +110,7 @@ class SearchIndex:
         # Create Index
         await redis_conn.ft(INDEX_NAME).create_index(
             fields = fields,
-            definition = IndexDefinition(prefix=[prefix], index_type=IndexType.HASH)
+            definition= IndexDefinition(prefix=[prefix], index_type=IndexType.HASH)
         )
 
     def process_tags(
