@@ -1,7 +1,7 @@
+import uvicorn
 import logging
 from pathlib import Path
 
-import uvicorn
 from aredis_om import Migrator, get_redis_connection
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -14,12 +14,16 @@ from vecsim_app.spa import SinglePageApplication
 logging.basicConfig(level=logging.DEBUG)
 
 app = FastAPI(
-    title=config.PROJECT_NAME, docs_url=config.API_DOCS, openapi_url=config.OPENAPI_DOCS
+    title=config.PROJECT_NAME,
+    docs_url=config.API_DOCS,
+    openapi_url=config.OPENAPI_DOCS
 )
 
 # Routers
 app.include_router(
-    routes.paper_router, prefix=config.API_V1_STR + "/paper", tags=["papers"]
+    routes.paper_router,
+    prefix=config.API_V1_STR + "/paper",
+    tags=["papers"]
 )
 
 
@@ -28,11 +32,8 @@ async def startup():
     # You can set the Redis OM URL using the REDIS_OM_URL environment
     # variable, or by manually creating the connection using your model's
     # Meta object.
-    Paper.Meta.database = get_redis_connection(
-        url=config.REDIS_URL, decode_responses=True
-    )
+    Paper.Meta.database = get_redis_connection(url=config.REDIS_URL, decode_responses=True)
     await Migrator().run()
-
 
 # static image files
 app.mount("/data", StaticFiles(directory="data"), name="data")
@@ -41,8 +42,9 @@ app.mount("/data", StaticFiles(directory="data"), name="data")
 current_file = Path(__file__)
 project_root = current_file.parent.resolve()
 gui_build_dir = project_root / "templates" / "build"
-app.mount(path="/", app=SinglePageApplication(directory=gui_build_dir), name="SPA")
-
+app.mount(
+    path="/", app=SinglePageApplication(directory=gui_build_dir), name="SPA"
+)
 if __name__ == "__main__":
     import logging
     import os
@@ -73,7 +75,7 @@ if __name__ == "__main__":
             allow_origins="*",
             allow_credentials=True,
             allow_methods=["*"],
-            allow_headers=["*"],
+            allow_headers=["*"]
         )
 
     uvicorn.run("vecsim_app.main:app", **server_attr)
