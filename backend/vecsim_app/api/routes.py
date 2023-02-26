@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import typing as t
 
 import redis.asyncio as redis
@@ -47,7 +48,7 @@ async def papers_from_results(total, results) -> t.Dict[str, t.Any]:
             for r in results
         ]
     )
-    print(f"Retrieved {len(results)} papers:\n" + dump)
+    logging.debug(f"Retrieved {len(results)} papers:\n" + dump)
     return {
         "total": total,
         "papers": results,
@@ -158,8 +159,8 @@ async def find_papers_by_user_text(similarity_request: UserTextSimilarityRequest
 
     # debug:
     for ae in article_embeddings:
-        print(ae[:5])
-    print(mid_embedding[:5])
+        logging.debug(ae[:5])
+    logging.debug(mid_embedding[:5])
 
     total, result = await asyncio.gather(
         redis_client.ft(config.INDEX_NAME).search(count_query),

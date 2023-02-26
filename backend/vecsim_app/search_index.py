@@ -1,3 +1,4 @@
+import logging
 import re
 from typing import Optional, Pattern
 
@@ -169,7 +170,7 @@ class SearchIndex:
         # Parse tags to create query
         tag_query = self.process_tags(categories, years, categories_operator)
         base_query = f"{tag_query}=>[{search_type} {number_of_results} @vector $vec_param AS vector_score]"
-        # print(f"base_query: {base_query}")  # debug
+        logging.debug(f"base_query: {base_query}")
         return (
             Query(base_query)
             .sort_by("vector_score")
@@ -191,5 +192,5 @@ class SearchIndex:
         """
         # Parse tags to create query
         tag_query = self.process_tags(categories, years)
-        print(f"tag_query: {tag_query}")
+        logging.debug(f"tag_query: {tag_query}")
         return Query(f"{tag_query}").no_content().dialect(2)
