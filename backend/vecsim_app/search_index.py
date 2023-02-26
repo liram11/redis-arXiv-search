@@ -49,7 +49,7 @@ class SearchIndex:
         redis_conn: Redis,
         number_of_vectors: int,
         prefix: str,
-        distance_metric: str = "L2",
+        distance_metric: str='L2'
     ):
         """
         Create a FLAT aka brute force style index.
@@ -71,7 +71,12 @@ class SearchIndex:
                 "BLOCK_SIZE": number_of_vectors,
             },
         )
-        await self._create(*fields, vector_field, redis_conn=redis_conn, prefix=prefix)
+        await self._create(
+            *fields,
+            vector_field,
+            redis_conn=redis_conn,
+            prefix=prefix
+        )
 
     async def create_hnsw(
         self,
@@ -79,7 +84,7 @@ class SearchIndex:
         redis_conn: Redis,
         number_of_vectors: int,
         prefix: str,
-        distance_metric: str = "COSINE",
+        distance_metric: str='COSINE'
     ):
         """
         Create an approximate NN index via HNSW.
@@ -102,11 +107,16 @@ class SearchIndex:
         )
         await self._create(*fields, vector_field, redis_conn=redis_conn, prefix=prefix)
 
-    async def _create(self, *fields, redis_conn: Redis, prefix: str):
+    async def _create(
+        self,
+        *fields,
+        redis_conn: Redis,
+        prefix: str
+    ):
         # Create Index
         await redis_conn.ft(INDEX_NAME).create_index(
-            fields=fields,
-            definition=IndexDefinition(prefix=[prefix], index_type=IndexType.HASH),
+            fields = fields,
+            definition = IndexDefinition(prefix=[prefix], index_type=IndexType.HASH)
         )
 
     def process_tags(
@@ -150,13 +160,12 @@ class SearchIndex:
         self,
         categories: list,
         years: list,
-        search_type: str = "KNN",
-        number_of_results: int = 10,
-        categories_operator: str = "AND",
+        search_type: str='KNN',
+        number_of_results: int=20,
+        categories_operator: str='AND',
     ) -> Query:
         """
         Create a RediSearch query to perform hybrid vector and tag based searches.
-
         Args:
             categories (list): List of categories.
             years (list): List of years.
@@ -179,7 +188,11 @@ class SearchIndex:
             .dialect(2)
         )
 
-    def count_query(self, years: list, categories: list) -> Query:
+    def count_query(
+        self,
+        years: list,
+        categories: list
+    ) -> Query:
         """
         Create a RediSearch query to count available documents.
 
