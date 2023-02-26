@@ -1,5 +1,7 @@
-from aredis_om import Field, HashModel
-
+from aredis_om import (
+    Field,
+    HashModel
+)
 
 # Paper Model
 class Paper(HashModel):
