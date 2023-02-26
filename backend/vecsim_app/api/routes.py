@@ -12,7 +12,7 @@ from vecsim_app.multilabel_classifier.inference import load_models, predict_cate
 from vecsim_app.schema import (
     CategoriesPredictionRequest,
     SimilarityRequest,
-    UserTextSimilarityRequest,
+    UserTextSimilarityRequest
 )
 from vecsim_app.search_index import SearchIndex
 
@@ -35,7 +35,7 @@ async def process_paper(p, i: int) -> t.Dict[str, t.Any]:
     paper = await Paper.get(p.paper_pk)
     paper = paper.dict()
     score = 1 - float(p.vector_score)
-    paper["similarity_score"] = score
+    paper['similarity_score'] = score
     return paper
 
 
