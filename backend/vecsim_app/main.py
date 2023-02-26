@@ -55,7 +55,7 @@ if __name__ == "__main__":
     logging.info(f"Running in {env} mode")
 
     server_attr = {
-        "host": "0.0.0.0",
+        "host": config.SERVER_HOST,
         "reload": True,
         "port": int(config.SERVER_PORT),
         "workers": 1,
