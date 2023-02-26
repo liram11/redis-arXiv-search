@@ -169,7 +169,7 @@ class SearchIndex:
         # Parse tags to create query
         tag_query = self.process_tags(categories, years, categories_operator)
         base_query = f"{tag_query}=>[{search_type} {number_of_results} @vector $vec_param AS vector_score]"
-        print(f"base_query: {base_query}")
+        # print(f"base_query: {base_query}")  # debug
         return (
             Query(base_query)
             .sort_by("vector_score")
